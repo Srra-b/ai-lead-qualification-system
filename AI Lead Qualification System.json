@@ -1,0 +1,400 @@
+{
+  "name": "AI Lead Qualification System",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "AI Lead Qualification Form",
+        "formDescription": "Please fill out your details below",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Full Name",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Work Email",
+              "fieldType": "email",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Company Size",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "1-10 employees"
+                  },
+                  {
+                    "option": "51-200 employees"
+                  },
+                  {
+                    "option": "+200 employees"
+                  }
+                ]
+              },
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Estimated Monthly Budget",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Under $1,000"
+                  },
+                  {
+                    "option": "$1,000 - $5,000"
+                  },
+                  {
+                    "option": "$10,000+"
+                  }
+                ]
+              },
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "What is your main business challenge right now?",
+              "fieldType": "textarea",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.6,
+      "position": [
+        0,
+        0
+      ],
+      "id": "87665bac-a88f-489b-8874-5f682ca4400e",
+      "name": "On form submission",
+      "webhookId": "6c7dd01a-436a-4ebb-bed0-91613ceee24f"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are an expert AI Lead Qualification Manager. Analyze the following lead details and calculate a Lead Score from 0 to 100 based on their potential value as a client.\n\nLEAD DETAILS:\n- Full Name: {{ $json['be noah'] }}\n- Work Email: {{ $json['xxx@gmail.com'] }}\n- Company Size: {{ $json['1-10 employees'] }}\n- Budget: {{ $json['Under $1,000'] }}\n- Main Challenge: {{ $json['ect ect'] }}\n\nQUALIFICATION CRITERIA:\n1. Budget: Higher budget = higher score. (<$1,000 gets low score, >$5,000 gets high score).\n2. Company Size: Teams with >10 employees are preferred.\n3. Challenge Clarity: A clear, actionable business problem increases the score.\n\nOUTPUT FORMAT:\nYou MUST respond ONLY with a valid JSON object. Do not include any extra introductory text or markdown formatting outside the JSON. Use this structure:\n\n{\n  \"score\": 85,\n  \"qualification_status\": \"Qualified\",\n  \"reasoning\": \"High budget ($5k-$10k) and a clearly defined automation need for a mid-sized team.\",\n  \"recommended_action\": \"Schedule an immediate demo call with senior sales rep.\"\n}",
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        224,
+        0
+      ],
+      "id": "87bb6909-a4e6-4f40-be30-0b862ae6a60c",
+      "name": "Basic LLM Chain"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        160,
+        208
+      ],
+      "id": "dbb902d4-0740-4b0d-9d77-8f026d442f2d",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "phr9e9Xcf7fzQhJ0",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "97a55fc5-199d-4440-ab62-cf773f91a1d2",
+              "leftValue": "={{ JSON.parse($json.text).score }}",
+              "rightValue": 70,
+              "operator": {
+                "type": "number",
+                "operation": "gte"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        720,
+        0
+      ],
+      "id": "d29405f5-d778-4ebe-a667-e28a690983fe",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "sendTo": "sswork.1425@gmail.com",
+        "subject": "New Qualified Lead: High Priority!🚨",
+        "emailType": "text",
+        "message": "=A new high-quality lead has been qualified by AI!  Score: {{ JSON.parse($node[\"Basic LLM Chain\"].json.text).score }}/100 Reasoning: {{ JSON.parse($node[\"Basic LLM Chain\"].json.text).reasoning }} Action Recommended: {{ JSON.parse($node[\"Basic LLM Chain\"].json.text).recommended_action }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        944,
+        -48
+      ],
+      "id": "cbed7bad-3a4c-4658-974d-6e30282042fa",
+      "name": "Send a message",
+      "webhookId": "05ad9392-f4a5-446d-bfdd-ec8ef6ece7b1",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "Qlg1coYW0FYTl7rE",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "sswork.1425@gmail.com",
+        "subject": "Thank you for reaching out to us",
+        "emailType": "text",
+        "message": "Hello, thank you for your interest. Unfortunately, based on the details provided, our current solutions might not be the best fit for your budget/requirements at this time.",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        944,
+        80
+      ],
+      "id": "57e81987-17c1-4b4b-91e0-72210b595270",
+      "name": "Send a message1",
+      "webhookId": "cd0be985-a19f-4d80-863f-8654c8d9a686",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "Qlg1coYW0FYTl7rE",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1j-pY52DmEJNvxSb0HCPiGqlUZcTMjErmV4bTa2yxjy4",
+          "mode": "list",
+          "cachedResultName": "AI Lead Qualification Database",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1j-pY52DmEJNvxSb0HCPiGqlUZcTMjErmV4bTa2yxjy4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1j-pY52DmEJNvxSb0HCPiGqlUZcTMjErmV4bTa2yxjy4/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Name": "={{ $('On form submission').item.json['Full Name'] }}",
+            "Email": "={{ $('On form submission').item.json['Work Email'] }}",
+            "Size": "={{ $('On form submission').item.json['Company Size'] }}",
+            "Budget": "={{ $('On form submission').item.json['Estimated Monthly Budget'] }}",
+            "Score": "={{ JSON.parse($node[\"Basic LLM Chain\"].json.text).score }}",
+            "Reasoning": "={{ JSON.parse($node[\"Basic LLM Chain\"].json.text).reasoning }}",
+            "Status": "={{ JSON.parse($node[\"Basic LLM Chain\"].json.text).qualification_status }}",
+            "Date": "={{ $('On form submission').item.json.submittedAt }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Date",
+              "displayName": "Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Size",
+              "displayName": "Size",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Budget",
+              "displayName": "Budget",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Score",
+              "displayName": "Score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Reasoning",
+              "displayName": "Reasoning",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        544,
+        0
+      ],
+      "id": "6adc88d0-2582-40ad-a0ae-d947e3d18cd1",
+      "name": "Append row in sheet1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "db9qV4EjfQ3rCMpa",
+          "name": "Google Sheets account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send a message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet1": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "787808ab-7648-464f-af99-1b1bbf1b5a0d",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "7955ffc402b8037219a10641d56f7d4b1d8e4ad348639310f5bce4d9bb3e0a52"
+  },
+  "nodeGroups": [],
+  "id": "upzvNT4T2mqTfAmn",
+  "tags": []
+}
