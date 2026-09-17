@@ -1,37 +1,48 @@
-# 🚀 AI Lead Qualification & Automated Routing System (n8n)
+# 📥 AI Lead Qualification & Automated Routing System
 
-An automated AI-driven lead scoring and qualification system built with **n8n**, **Google Gemini AI**, **Google Sheets**, and **Gmail**.
-
-## 🎬 Live Project Demo
-
-Watch the video walk-through to see the AI Lead Qualification System processing leads, updating Google Sheets, and sending emails in real-time:
-
-[![Watch the Demo](https://cdn.loom.com/sessions/thumbnails/1546c5ac7fcb422f988ed8e1fba2d669-with-play-3000.gif)](https://www.loom.com/share/1546c5ac7fcb422f988ed8e1fba2d669)
-
-👉 **[Click here to watch the full demo on Loom](https://www.loom.com/share/1546c5ac7fcb422f988ed8e1fba2d669)**
+An automated AI-driven lead scoring and qualification system built with **n8n**, **Google Gemini AI**, **Google Sheets API**, and **Gmail API**. It captures incoming sales leads, evaluates their qualification status using generative AI, logs structured data, and routes tailored response emails based on lead priority.
 
 ---
 
-## 📌 Features
+## 📽️ System Live Demo
 
-- **Automated Lead Capture**: Receives incoming submissions dynamically via Form Webhooks.
-- **AI-Powered Qualification**: Uses Google Gemini to analyze budget, company size, and business goals to compute a dynamic `Lead Score` (0-100).
-- **Structured Data Logging**: Saves lead information, AI status, and reasoning directly into Google Sheets.
-- **Smart Conditional Routing**: Uses an `If` branching node to evaluate lead thresholds (>=70).
-- **Automated Email Messaging**: Sends acceptance emails to high-value leads and low-priority emails to non-qualifying responses.
+📺 **[Click Here to Watch the Live Demo Video](https://www.loom.com/share/1546c5ac7fcb422f988ed8e1fba2d669)**
+
+---
+
+## 📸 System Screenshots & Visual Proof
+
+| n8n Workflow Canvas | Google Sheets Database | Gmail Response |
+| --- | --- | --- |
+|  |  |  |
+
+---
+
+## 🔑 Key Features
+
+* **Real-Time Webform Trigger**: Captures submissions instantaneously without manual intervention.
+* **AI-Powered Lead Scoring**: Leverages Google Gemini AI to analyze budget, company size, and challenge context to generate a dynamic score (0-100).
+* **Structured Data Logging**: Appends incoming lead details, dynamic AI scores, and qualification reasoning into a Google Sheets document.
+* **Smart Conditional Branching**: Evaluates score thresholds ($\ge 70$) using an `If` routing node.
+* **Automated Email Outreach**: Sends personalized outreach emails to qualified leads and polite follow-up messages to low-priority prospects via Gmail API.
 
 ---
 
 ## 🛠️ Tech Stack
 
-- **Automation Engine**: n8n
-- **AI Model**: Google Gemini (Basic LLM Chain)
-- **Database**: Google Sheets API
-- **Email Delivery**: Gmail API
+* **Workflow Engine**: n8n
+* **AI Engine**: Google Gemini (Basic LLM Chain)
+* **Database / CRM**: Google Sheets API
+* **Email Engine**: Gmail API (OAuth 2.0)
 
 ---
 
-## 📂 Repository Contents
+## 🚀 How to Import and Run
 
-- `AI Lead Qualification System.json` - Complete exported n8n workflow.
-- Screenshots of Form submission, Google Sheets output, and Gmail delivery.
+1. Download the JSON workflow file: [`AI Lead Qualification System.json`](https://www.google.com/search?q=./AI%2520Lead%2520Qualification%2520System.json).
+2. Open your n8n canvas and click **Import from File**.
+3. Upload `AI Lead Qualification System.json`.
+4. Configure your **Google Gemini AI**, **Google Sheets**, and **Gmail** OAuth2 credentials.
+5. Activate the workflow and test with a sample form submission!
+
+---
