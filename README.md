@@ -5,7 +5,6 @@ An automated AI-driven lead scoring and qualification system built with **n8n**,
 ---
 
 ## 📽️ System Live Demo
-
 📺 **[Click Here to Watch the Live Demo Video](https://www.loom.com/share/1546c5ac7fcb422f988ed8e1fba2d669)**
 
 ---
@@ -13,13 +12,12 @@ An automated AI-driven lead scoring and qualification system built with **n8n**,
 ## 📸 System Screenshots & Visual Proof
 
 | n8n Workflow Canvas | Google Sheets Database | Gmail Response |
-| --- | --- | --- |
-|  |  |  |
+| :---: | :---: | :---: |
+| ![Workflow](./workflow-screenshot.png) | ![Database](./Sheets-screenshot.png) | ![Email](./email-screenshot.png) |
 
 ---
 
 ## 🔑 Key Features
-
 * **Real-Time Webform Trigger**: Captures submissions instantaneously without manual intervention.
 * **AI-Powered Lead Scoring**: Leverages Google Gemini AI to analyze budget, company size, and challenge context to generate a dynamic score (0-100).
 * **Structured Data Logging**: Appends incoming lead details, dynamic AI scores, and qualification reasoning into a Google Sheets document.
@@ -29,7 +27,6 @@ An automated AI-driven lead scoring and qualification system built with **n8n**,
 ---
 
 ## 🛠️ Tech Stack
-
 * **Workflow Engine**: n8n
 * **AI Engine**: Google Gemini (Basic LLM Chain)
 * **Database / CRM**: Google Sheets API
@@ -39,10 +36,8 @@ An automated AI-driven lead scoring and qualification system built with **n8n**,
 
 ## 🚀 How to Import and Run
 
-1. Download the JSON workflow file: [`AI Lead Qualification System.json`](https://www.google.com/search?q=./AI%2520Lead%2520Qualification%2520System.json).
+1. Download the JSON workflow file: [`AI Lead Qualification System.json`](./AI%20Lead%20Qualification%20System.json).
 2. Open your n8n canvas and click **Import from File**.
 3. Upload `AI Lead Qualification System.json`.
 4. Configure your **Google Gemini AI**, **Google Sheets**, and **Gmail** OAuth2 credentials.
 5. Activate the workflow and test with a sample form submission!
-
----
