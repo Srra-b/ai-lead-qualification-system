@@ -34,10 +34,7 @@ An automated AI-driven lead scoring and qualification system built with **n8n**,
 
 ---
 
-## 🚀 How to Import and Run
-
-1. Download the JSON workflow file: [`AI Lead Qualification System.json`](./AI%20Lead%20Qualification%20System.json).
-2. Open your n8n canvas and click **Import from File**.
-3. Upload `AI Lead Qualification System.json`.
-4. Configure your **Google Gemini AI**, **Google Sheets**, and **Gmail** OAuth2 credentials.
-5. Activate the workflow and test with a sample form submission!
+## 🎯 Business Impact & Value
+* **Instant Response Time**: Eliminates manual delay by analyzing and responding to leads in seconds.
+* **Higher Conversion**: Ensures high-priority prospects are flagged immediately for the sales team.
+* **Data-Driven Insights**: Provides clear AI-generated reasoning for every qualified lead.
